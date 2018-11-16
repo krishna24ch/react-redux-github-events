@@ -1,33 +1,54 @@
 import store from '../store';
+import * as ActionTypes from './actionTypes';
 
-export const fetchEvents = () => {
+export const fetchEvents = (userName) => {
     return {
-        type: 'FETCH_EVENTS'
+        type: ActionTypes.FETCH_EVENTS,
+        userName
     };
 };
 
 export const receiveEvents = (events) => {
     return {
-        type: 'FETCH_EVENTS_SUCCESS',
+        type: ActionTypes.FETCH_EVENTS_SUCCESS,
         events
     };
 };
 
-export const receivedError = (error) => {
+export const receivedError = (errorMessage) => {
     return {
-        type: 'FETCH_FAILED',
-        error
+        type: ActionTypes.FETCH_FAILED,
+        errorMessage
     };
 };
 
-export const getGithubEvents = (page) => {
-    store.dispatch(fetchEvents());
+export const previousPage = () => {
+    return {
+        type: ActionTypes.PREVIOUS_PAGE
+    }
+}
+
+export const nextPage = () => {
+    return {
+        type: ActionTypes.NEXT_PAGE
+    }
+}
+
+export const getGithubEvents = (pageAction, userName) => {
+    store.dispatch(fetchEvents(userName));
+    store.dispatch(pageAction === 'next' ? nextPage() : previousPage());
     return (dispatch, getState) => {
-        return fetch(`https://api.github.com/events?page=${page}`).then(data => data.json())
+        return fetch(`https://api.github.com/users/${getState().userName}/events?page=${getState().page}&per_page=5`).then(data => data.json())
             .then(data => {
-                dispatch(receiveEvents(data));
+                if(data.message) {
+                    throw new Error("Unable to fetch data");
+                } else if(data.length <= 0) {
+                    throw new Error("No events available for this user");
+                } else {
+                    dispatch(receiveEvents(data));
+                }
             }).catch(error => {
-                dispatch(receivedError(error));
+                dispatch(receivedError(error.message));
             });
     };
 };
