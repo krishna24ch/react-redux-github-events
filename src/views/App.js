@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Grid, Alert, Row, Col } from 'react-bootstrap';
-import EventsList from './views/eventsList';
+import { Alert, Row, Col } from 'react-bootstrap';
+import EventsList from './EventsList';
 import { connect } from 'react-redux';
 import debounce from 'lodash/debounce';
-import { getGithubEvents } from './actions/fetchEventsAction';
+import { getGithubEvents } from '../actions';
 
 class App extends Component {
   constructor(props) {
@@ -24,10 +24,11 @@ class App extends Component {
 
   render() {
     const { isLoading, githubEvents, errorMessage, page, userName } = this.props;
+    debugger;
     return (
-      <Grid>
+      <div className="container">
         <Row>
-          <Col className="hirizantal-center">
+          <Col className="user-name-input">
             <h4>Enter github user name</h4>
             <input type="text" onChange={this.onUserEnter} />
           </Col>
@@ -53,7 +54,7 @@ class App extends Component {
             />
           </div>
         )}
-      </Grid>
+      </div>
     );
   }
 }

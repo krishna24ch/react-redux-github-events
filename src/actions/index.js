@@ -1,5 +1,5 @@
 import store from '../store';
-import * as ActionTypes from './actionTypes';
+import ActionTypes from './actionTypes';
 
 export const fetchEvents = (userName) => {
     return {

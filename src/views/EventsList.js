@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import EventItem from './eventItem';
+import EventItem from './EventItem';
 import { Table } from 'react-bootstrap';
 import Pager from 'react-bootstrap/lib/Pager'
 
